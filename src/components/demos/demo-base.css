@@ -1,0 +1,25 @@
+/* Base compartilhada pelos demos (marcas fictícias do portfólio).
+   Escopada por [data-demo] e com :where() para não pesar na especificidade:
+   assim as classes de cada demo continuam mandando, como no HTML original.
+   Este arquivo é global de propósito: CSS Modules não aceitam seletores só de elemento (p, a, h1...). */
+
+:where([data-demo]),
+:where([data-demo]) * {
+  box-sizing: border-box;
+}
+
+:where([data-demo]) :where(h1, h2, h3) {
+  font-family: var(--demo-heading-font, Georgia, serif);
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.2;
+}
+
+:where([data-demo]) p {
+  margin: 0;
+}
+
+:where([data-demo]) a {
+  color: inherit;
+  text-decoration: none;
+}

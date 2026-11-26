@@ -1,0 +1,57 @@
+/* Tokens e base do site da CIER (as fontes vêm de next/font, ver src/app/(site)/layout.tsx) */
+:root {
+  --bg: #07060d;
+  --surface: #12101a;
+  --surface-2: #1b1726;
+  --fg: #f6f3fb;
+  --muted: #b3a8c4;
+  --primary: #a78bfa;
+  --primary-deep: #7c3aed;
+  --highlight: #e9d5ff;
+  --border: #2a2438;
+  --overlay: rgb(7 6 13 / 0.72);
+  --radius: 0.875rem;
+  --shadow-glow: 0 0 48px rgb(124 58 237 / 0.35);
+  --gutter: 1rem;
+  color-scheme: dark;
+}
+@media (min-width: 768px) { :root { --gutter: 1.25rem; } }
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--bg);
+  z-index: 40;
+}
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: 0.02em; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+img { display: block; max-width: 100%; }
+svg { flex: none; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+.page {
+  --font-sans: var(--font-outfit), system-ui, sans-serif;
+  --font-display: var(--font-orbitron), system-ui, sans-serif;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: clip;
+}
+.wrap {
+  max-width: 64rem;
+  margin-inline: auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}

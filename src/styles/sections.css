@@ -1,0 +1,61 @@
+/* Seções */
+h2.sec { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.33; }
+@media (min-width: 768px) { h2.sec { font-size: 1.875rem; line-height: 1.2; } }
+.sec-pad { padding-block: 3rem; }
+@media (min-width: 768px) { .sec-pad { padding-block: 4rem; } }
+.muted { color: var(--muted); }
+.sub { margin-top: 0.75rem; max-width: 36rem; }
+
+#servicos { border-top: 1px solid var(--border); background: var(--surface); }
+.grid3 { margin-top: 2.5rem; display: grid; gap: 1rem; }
+@media (min-width: 768px) { .grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.card { border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+#servicos .card { background: var(--bg); }
+.card .big { width: 1.5rem; height: 1.5rem; color: var(--primary); }
+.card h3 { margin-top: 1rem; font-size: 1.125rem; line-height: 1.55; font-weight: 600; }
+.card p { margin-top: 0.5rem; font-size: 0.875rem; color: var(--muted); }
+#processo ol { list-style: none; margin: 2.5rem 0 0; padding: 0; display: grid; gap: 1rem; }
+@media (min-width: 768px) { #processo ol { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+#processo .card { background: var(--surface-2); }
+#processo .n { font-size: 0.875rem; font-weight: 500; color: var(--primary); }
+#processo .card h3 { margin-top: 0.5rem; }
+
+#contato { border-top: 1px solid var(--border); }
+#contato .wrap { display: grid; gap: 2rem; padding-block: 3rem; }
+@media (min-width: 768px) { #contato .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; padding-block: 4rem; } }
+#contato .col { min-width: 0; }
+#contato .sub { max-width: none; }
+.links { margin-top: 2rem; display: grid; gap: 0.75rem; font-size: 0.875rem; }
+.links a { display: flex; align-items: center; gap: 0.75rem; min-width: 0; overflow-wrap: anywhere; }
+.links a:hover { color: var(--primary); }
+.links svg { color: var(--primary); }
+form.lead-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; min-width: 0; }
+form label { display: block; font-size: 0.875rem; }
+form label + input, form label + textarea { margin-top: 0.5rem; }
+form label.second { margin-top: 1rem; }
+form input, form textarea {
+  display: block; width: 100%; padding: 0.75rem; border-radius: 0.5rem;
+  border: 1px solid var(--border); background: var(--bg); color: var(--fg);
+  font: inherit; font-size: 1rem; line-height: 1.5; outline: none;
+}
+form textarea { resize: vertical; }
+form input:focus, form textarea:focus { border-color: var(--primary); }
+form input::placeholder, form textarea::placeholder { color: var(--muted); opacity: 0.7; }
+form .submit { margin-top: 1rem; width: 100%; }
+form .submit.btn { background: var(--primary-deep); }
+
+footer.foot { border-top: 1px solid var(--border); padding: 2rem var(--gutter); font-size: 0.875rem; color: var(--muted); }
+footer.foot .row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+footer.foot p { text-align: right; min-width: 0; }
+@media (min-width: 768px) { footer.foot { padding-inline: 2rem; } }
+
+/* Valores */
+.price-card { display: grid; gap: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: 1.5rem; }
+.price-card .btn { width: 100%; }
+.price-num { color: var(--primary); white-space: nowrap; }
+@media (min-width: 768px) { .price-card { grid-template-columns: 1fr auto; align-items: center; padding: 2rem; } .price-card .btn { width: auto; } }
+
+/* Botão flutuante do WhatsApp (celular) */
+.wa-float { position: fixed; right: max(1rem, env(safe-area-inset-right, 0px)); bottom: max(1rem, env(safe-area-inset-bottom, 0px)); z-index: 30; display: inline-flex; align-items: center; gap: 0.5rem; min-height: 3rem; padding-inline: 1.1rem; border-radius: 999px; background: var(--primary-deep); box-shadow: var(--shadow-glow); font-size: 0.9rem; font-weight: 500; }
+footer.foot { padding-bottom: 5rem; }
+@media (min-width: 768px) { .wa-float { display: none; } footer.foot { padding-bottom: 2rem; } }
