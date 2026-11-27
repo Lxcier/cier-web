@@ -1,218 +1,353 @@
-import Link from "next/link";
-import { waLink } from "@/lib/whatsapp";
-import { fraunces, inter } from "./fonts";
-import s from "./clinic.module.css";
+"use client";
 
-const MENSAGEM = 'Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER e quero um site assim para o meu consultório.';
+import { useMemo, useState } from "react";
+import { newsreader, figtree } from "./fonts";
+import styles from "./clinic.module.css";
+import {
+  DIAS_UTEIS,
+  horasDe,
+  primeiraLivre,
+  TRATAMENTOS,
+  QUIZ,
+  TIMELINE,
+  FAQ,
+  waLink,
+  DEMO_MSG,
+} from "./data";
 
-const TRATAMENTOS = [
-  { titulo: "Limpeza e prevenção", texto: "Profilaxia, aplicação de flúor e orientação de higiene para evitar problemas." },
-  { titulo: "Clareamento", texto: "Opções em consultório ou caseiro, escolhidas conforme a sensibilidade dos seus dentes." },
-  { titulo: "Ortodontia", texto: "Avaliação para aparelhos fixos ou alinhadores, com acompanhamento regular." },
-  { titulo: "Restaurações", texto: "Tratamento de cáries e recuperação do formato e da cor do dente." },
-  { titulo: "Implantes e próteses", texto: "Reposição de dentes com planejamento e acompanhamento." },
-  { titulo: "Odontopediatria", texto: "Atendimento acolhedor para crianças, no ritmo delas." },
-];
+const fDia = new Intl.DateTimeFormat("pt-BR", { weekday: "short" });
+const fLongo = new Intl.DateTimeFormat("pt-BR", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+});
 
-const PASSOS = [
-  { titulo: "Você agenda", texto: "Escolha um horário pelo WhatsApp. Respondemos no mesmo dia útil." },
-  { titulo: "Avaliação", texto: "Conversa, exame clínico e, se necessário, radiografia." },
-  { titulo: "Plano de tratamento", texto: "Você recebe as opções, os prazos e os valores antes de decidir." },
-];
+export default function ClinicDemo() {
+  const [selDia, setSelDia] = useState(0);
+  const [selHora, setSelHora] = useState<string | null>(() =>
+    primeiraLivre(DIAS_UTEIS[0])
+  );
+  const [quizAtivo, setQuizAtivo] = useState<number | null>(null);
 
-const DUVIDAS = [
-  {
-    pergunta: "Como funciona a primeira consulta?",
-    resposta: "É uma avaliação: conversamos sobre o que você sente e quer melhorar, examinamos e apresentamos o caminho.",
-  },
-  { pergunta: "Atendem crianças?", resposta: "Sim. O atendimento é feito com calma e no ritmo da criança." },
-  {
-    pergunta: "Quais formas de pagamento?",
-    resposta: "Aqui entra a política real da clínica: Pix, cartão e parcelamento. Este texto é de exemplo.",
-  },
-  {
-    pergunta: "Preciso levar algum exame?",
-    resposta: "Se você já tem radiografias, leve. Se não, avaliamos se há necessidade.",
-  },
-];
+  const slotsDoDia = useMemo(() => horasDe(DIAS_UTEIS[selDia]), [selDia]);
 
-/** Projeto demonstrativo: site de consultório odontológico (marca fictícia). */
-export function ClinicDemo() {
-  const wa = waLink(MENSAGEM);
+  function escolheDia(i: number) {
+    setSelDia(i);
+    setSelHora(primeiraLivre(DIAS_UTEIS[i]));
+  }
+
+  function escolheHora(h: string, ocupado: boolean) {
+    if (ocupado) return;
+    setSelHora(h);
+  }
+
+  const resumoTxt = selHora
+    ? (() => {
+        const txt = `${fLongo.format(DIAS_UTEIS[selDia])}, às ${selHora}`;
+        return txt.charAt(0).toUpperCase() + txt.slice(1);
+      })()
+    : null;
+
+  const bookHref = selHora
+    ? waLink(
+        `Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. Esta é a tela de agendamento de exemplo, com o horário "${resumoTxt}". Quero um site assim para o meu consultório.`
+      )
+    : "#";
+
+  const quiz = quizAtivo !== null ? QUIZ[quizAtivo] : null;
+  const quizHref = quiz
+    ? waLink(
+        `Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. A triagem de exemplo sugeriu "${quiz.t}". Quero um site assim para o meu consultório.`
+      )
+    : "#";
+
+  const waGeral = waLink(DEMO_MSG);
 
   return (
-    <div className={`${s.root} ${fraunces.variable} ${inter.variable}`} data-demo>
-      <div className={s.demoBar}>
-        <div className={s.wrap}>
-          <span>Projeto demonstrativo da CIER · marca fictícia. Os botões abrem a conversa com a CIER.</span>
-          <span>
-            <Link href="/portfolio?frente=sites">← Voltar ao portfólio</Link>
-          </span>
-        </div>
+    <div
+      className={`${styles.clinic} ${newsreader.variable} ${figtree.variable}`}
+      data-demo="clinic"
+    >
+      <div className={styles["demo-bar"]}>
+        <span>
+          Projeto demonstrativo da CIER · marca fictícia. Os botões abrem a
+          conversa com a CIER.
+        </span>
+        <a href="/portfolio?frente=sites">← Voltar ao portfólio</a>
       </div>
 
-      <header className={s.nav}>
-        <div className={s.wrap}>
-          <a href="#topo" className={s.logo}>
-            <i>S</i>Sorriso Prime
+      <div className={styles.shell}>
+        <aside className={styles.rail}>
+          <a className={styles.logo} href="#topo">
+            <i>S</i>
+            <span>
+              Sorriso <b>Prime</b>
+            </span>
           </a>
-          <nav className={s.links} aria-label="Seções">
-            <a href="#servicos">Tratamentos</a>
-            <a href="#sobre">A clínica</a>
-            <a href="#atendimento">Atendimento</a>
+          <nav aria-label="Seções">
+            <a href="#agendar">Agendar</a>
+            <a href="#tratamentos">Tratamentos</a>
+            <a href="#triagem">Qual tratamento?</a>
+            <a href="#dra">A dentista</a>
+            <a href="#consulta">Primeira consulta</a>
             <a href="#duvidas">Dúvidas</a>
           </nav>
-          <a className={`${s.btn} ${s.sm}`} target="_blank" rel="noreferrer" href={wa}>
-            Agendar avaliação
-          </a>
-        </div>
-      </header>
+          <div className={styles.info}>
+            <b>Segunda a sexta</b>
+            <br />
+            8h às 18h
+            <br />
+            <b>Sábado</b>
+            <br />
+            8h às 12h
+            <br />
+            Rua Exemplo, 123 · Centro
+            <br />
+            (endereço fictício)
+          </div>
+        </aside>
 
-      <main id="topo">
-        <div className={`${s.wrap} ${s.hero}`}>
-          <div>
-            <p className={s.eyebrow}>Odontologia geral e estética</p>
-            <h1>Cuidar do seu sorriso começa com uma conversa.</h1>
-            <p className={s.lead}>
-              Atendimento com hora marcada, explicação clara de cada etapa e um plano de tratamento que cabe na sua
-              rotina.
+        <main className={styles.main} id="topo">
+          <section className={`${styles.hero} ${styles.col}`}>
+            <p className={styles.eyebrow}>Odontologia geral e estética</p>
+            <h1>
+              Seu sorriso, <em>sem pressa</em> e sem susto.
+            </h1>
+            <p className={styles.lead}>
+              Hora marcada, cada etapa explicada antes de começar e um plano
+              de tratamento que cabe na sua rotina. Escolha abaixo o melhor
+              horário para a primeira avaliação.
             </p>
-            <div className={s.cta}>
-              <a className={s.btn} target="_blank" rel="noreferrer" href={wa}>
-                Agendar avaliação pelo WhatsApp
-              </a>
-              <a className={`${s.btn} ${s.alt}`} href="#servicos">
-                Ver tratamentos
-              </a>
-            </div>
-            <div className={s.facts}>
-              <span>Hora marcada</span>
-              <span>Plano explicado antes de começar</span>
-              <span>Atendimento para toda a família</span>
-            </div>
-          </div>
-          <div className={s.visual} aria-hidden="true">
-            <svg className={s.tooth} viewBox="0 0 100 120" fill="none">
-              <path
-                d="M50 8c-10-6-30-4-36 12-5 14 2 30 6 44 3 12 3 36 12 40 8 3 9-18 18-18s10 21 18 18c9-4 9-28 12-40 4-14 11-30 6-44C80 4 60 2 50 8Z"
-                fill="#fff"
-                stroke="#0e7490"
-                strokeWidth="3"
-                strokeLinejoin="round"
-              />
-              <path d="M32 34c4-6 10-8 16-6" stroke="#bae6f0" strokeWidth="4" strokeLinecap="round" />
-            </svg>
-            <div className={`${s.float} ${s.f1}`}>
-              <b>Avaliação</b>primeiro passo
-            </div>
-            <div className={`${s.float} ${s.f2}`}>
-              <b>Plano claro</b>etapas e prazos
-            </div>
-          </div>
-        </div>
+          </section>
 
-        <section id="servicos">
-          <div className={s.wrap}>
-            <div className={s.secHead}>
-              <h2>Tratamentos</h2>
-              <p>Do cuidado de rotina aos procedimentos estéticos, tudo explicado antes de começar.</p>
+          <section
+            id="agendar"
+            className={styles.book}
+            aria-labelledby="book-t"
+          >
+            <div className={styles["book-main"]}>
+              <h2 id="book-t">Escolha um horário</h2>
+              <p className={styles.muted}>Avaliação inicial de 40 minutos.</p>
+              <div className={styles.days} role="group" aria-label="Dia da consulta">
+                {DIAS_UTEIS.map((dia, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={styles.day}
+                    aria-pressed={i === selDia}
+                    onClick={() => escolheDia(i)}
+                  >
+                    <span>{fDia.format(dia).replace(".", "")}</span>
+                    <b>{dia.getDate()}</b>
+                  </button>
+                ))}
+              </div>
+              <div className={styles.times} role="group" aria-label="Horário da consulta">
+                {slotsDoDia.map((x) => (
+                  <button
+                    key={x.h}
+                    type="button"
+                    className={styles.time}
+                    disabled={x.ocupado}
+                    aria-pressed={x.h === selHora}
+                    onClick={() => escolheHora(x.h, x.ocupado)}
+                  >
+                    {x.h}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className={`${s.grid} ${s.g3}`}>
-              {TRATAMENTOS.map((t, i) => (
-                <article key={t.titulo} className={s.card}>
-                  <div className={s.ic}>{i + 1}</div>
-                  <h3>{t.titulo}</h3>
-                  <p>{t.texto}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="sobre" className={s.about}>
-          <div className={s.wrap}>
-            <div className={s.portrait} aria-hidden="true">
-              HD
-            </div>
-            <div>
-              <h2>Uma clínica pequena, com atenção de verdade.</h2>
-              <p>
-                Aqui você conversa com a dentista antes de qualquer procedimento. A ideia é simples: entender o que você
-                precisa, explicar as opções e decidir juntos.
+            <div className={styles["book-side"]}>
+              <p className={styles.k}>Seu pedido</p>
+              <p className={styles.sum}>
+                {resumoTxt ?? "Sem horário livre neste dia. Escolha outro dia."}
               </p>
-              <p>Esta seção apresenta o profissional responsável, a formação e a filosofia de atendimento.</p>
-              <small>Dra. Helena Duarte · CRO 00000 (dados fictícios, apenas para demonstração)</small>
+              <a
+                className={styles.btn}
+                target="_blank"
+                rel="noreferrer"
+                href={bookHref}
+                aria-disabled={!selHora}
+              >
+                Pedir este horário no WhatsApp
+              </a>
+              <p className={styles.note}>
+                Demonstração: os horários são de exemplo e o pedido abre a
+                conversa com a CIER.
+              </p>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section id="atendimento">
-          <div className={s.wrap}>
-            <div className={s.secHead}>
-              <h2>Como funciona o atendimento</h2>
-              <p>Três passos, sem surpresa no meio do caminho.</p>
+          <section id="tratamentos" className={styles.sec}>
+            <div className={styles.col}>
+              <h2>Tratamentos</h2>
+              <p className={styles.sub}>
+                Do cuidado de rotina aos procedimentos estéticos. Tudo
+                explicado antes de começar.
+              </p>
             </div>
-            <div className={`${s.grid} ${s.g3} ${s.steps}`}>
-              {PASSOS.map((p) => (
-                <div key={p.titulo} className={s.step}>
-                  <h3>{p.titulo}</h3>
-                  <p>{p.texto}</p>
-                </div>
+            <ul className={`${styles.lista} ${styles.col}`}>
+              {TRATAMENTOS.map((t) => (
+                <li className={styles.trat} key={t.titulo}>
+                  <h3>{t.titulo}</h3>
+                  <p>{t.desc}</p>
+                  <span className={styles.dur}>{t.dur}</span>
+                </li>
               ))}
-            </div>
-          </div>
-        </section>
+            </ul>
+          </section>
 
-        <section id="duvidas">
-          <div className={s.wrap} style={{ maxWidth: "48rem" }}>
-            <div className={s.secHead}>
-              <h2>Dúvidas frequentes</h2>
+          <section id="triagem" className={styles.sec}>
+            <div className={styles.col}>
+              <h2>Qual tratamento combina com você?</h2>
+              <p className={styles.sub}>
+                Uma pergunta, uma sugestão. Não substitui a avaliação com a
+                dentista.
+              </p>
+              <div
+                className={styles.opts}
+                role="group"
+                aria-label="O que trouxe você aqui"
+              >
+                {QUIZ.map((q, i) => (
+                  <button
+                    key={q.k}
+                    type="button"
+                    className={styles.opt}
+                    aria-pressed={quizAtivo === i}
+                    onClick={() => setQuizAtivo(i)}
+                  >
+                    {q.k}
+                  </button>
+                ))}
+              </div>
+              {quiz && (
+                <div className={styles.answer} aria-live="polite">
+                  <h3>{quiz.t}</h3>
+                  <p className={styles.muted}>{quiz.p}</p>
+                  <a
+                    className={`${styles.btn} ${styles.line}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    href={quizHref}
+                  >
+                    Conversar sobre isso no WhatsApp
+                  </a>
+                </div>
+              )}
             </div>
-            {DUVIDAS.map((d) => (
-              <details key={d.pergunta}>
-                <summary>{d.pergunta}</summary>
-                <p>{d.resposta}</p>
-              </details>
-            ))}
-          </div>
-        </section>
+          </section>
 
-        <section>
-          <div className={s.wrap}>
-            <div className={s.contact}>
+          <section id="dra" className={styles.sec}>
+            <div className={`${styles.dra} ${styles.col}`}>
+              <div className={styles.portrait} aria-hidden="true">
+                HD
+              </div>
               <div>
-                <h2>Pronto para marcar sua avaliação?</h2>
-                <p>Chame no WhatsApp e escolha o melhor horário.</p>
-                <a className={s.btn} target="_blank" rel="noreferrer" href={wa}>
+                <h2>Uma clínica pequena, com atenção de verdade.</h2>
+                <p>
+                  Aqui você conversa com a dentista antes de qualquer
+                  procedimento. Entendemos o que você precisa, explicamos as
+                  opções e decidimos juntos.
+                </p>
+                <dl className={styles.facts}>
+                  <div>
+                    <dt>Responsável</dt>
+                    <dd>Dra. Helena Duarte</dd>
+                  </div>
+                  <div>
+                    <dt>Registro</dt>
+                    <dd>CRO 00000</dd>
+                  </div>
+                  <div>
+                    <dt>Atuação</dt>
+                    <dd>12 anos</dd>
+                  </div>
+                </dl>
+                <p className={styles.ex}>
+                  Nome, registro e tempo de atuação são fictícios, apenas
+                  para demonstração.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section id="consulta" className={styles.sec}>
+            <div className={styles.col}>
+              <h2>Como é a primeira consulta</h2>
+              <p className={styles.sub}>
+                Quarenta minutos, sem surpresa no meio do caminho.
+              </p>
+              <ol className={styles.tl}>
+                {TIMELINE.map((item) => (
+                  <li key={item.t}>
+                    <span className={styles.t}>{item.t}</span>
+                    <h3>{item.titulo}</h3>
+                    <p>{item.desc}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </section>
+
+          <section id="duvidas" className={styles.sec}>
+            <div className={styles.col}>
+              <h2>Dúvidas frequentes</h2>
+              <div className={styles.faq}>
+                {FAQ.map((f) => (
+                  <details key={f.q}>
+                    <summary>{f.q}</summary>
+                    <p>{f.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className={styles.sec}>
+            <div className={styles.col}>
+              <h2>Onde estamos</h2>
+              <div className={styles.hours}>
+                <dl>
+                  <dt>Endereço</dt>
+                  <dd>Rua Exemplo, 123 · Centro (fictício)</dd>
+                  <dt>Contato</dt>
+                  <dd>(00) 00000-0000 · contato@exemplo.com</dd>
+                </dl>
+                <dl>
+                  <dt>Segunda a sexta</dt>
+                  <dd>8h às 18h</dd>
+                  <dt>Sábado</dt>
+                  <dd>8h às 12h</dd>
+                </dl>
+              </div>
+              <div className={styles["cta-end"]}>
+                <a
+                  className={styles.btn}
+                  target="_blank"
+                  rel="noreferrer"
+                  href={waGeral}
+                >
                   Falar no WhatsApp
                 </a>
-              </div>
-              <div className={s.info}>
-                <div>
-                  <b>Endereço</b>Rua Exemplo, 123 · Centro (fictício)
-                </div>
-                <div>
-                  <b>Horário</b>Segunda a sexta, 8h às 18h · Sábado, 8h às 12h
-                </div>
-                <div>
-                  <b>Contato</b>(00) 00000-0000 · contato@exemplo.com
-                </div>
+                <a className={`${styles.btn} ${styles.line}`} href="#agendar">
+                  Voltar aos horários
+                </a>
               </div>
             </div>
-          </div>
-        </section>
-      </main>
+          </section>
 
-      <footer>
-        <div className={s.wrap}>
-          Sorriso Prime é uma marca fictícia criada pela CIER para demonstração. ·{" "}
-          <Link href="/portfolio?frente=sites" style={{ textDecoration: "underline" }}>
-            Portfólio CIER
-          </Link>
-        </div>
-      </footer>
-      <a className={`${s.btn} ${s.stickyWa}`} target="_blank" rel="noreferrer" href={wa}>
-        Agendar pelo WhatsApp
+          <footer className={styles.foot}>
+            Sorriso Prime é uma marca fictícia criada pela CIER para
+            demonstração. ·{" "}
+            <a href="/portfolio?frente=sites" style={{ textDecoration: "underline" }}>
+              Portfólio CIER
+            </a>
+          </footer>
+        </main>
+      </div>
+      <a className={`${styles.btn} ${styles.fab}`} href="#agendar">
+        Agendar avaliação
       </a>
     </div>
   );
