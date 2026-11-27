@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useState } from "react";
 import { newsreader, figtree } from "./fonts";
 import styles from "./clinic.module.css";
 
@@ -76,11 +76,7 @@ const DIAS_UTEIS = gerarDiasUteis();
 const fDia = new Intl.DateTimeFormat("pt-BR", { weekday: "short" });
 const fLongo = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "numeric", month: "long" });
 
-const demoVars = {
-  "--demo-heading-font": "var(--font-clinic-serif)",
-} as CSSProperties;
-
-export default function ClinicDemo() {
+export function ClinicDemo() {
   const [selDia, setSelDia] = useState(0);
   const [selHora, setSelHora] = useState<string | null>(() => primeiraLivre(DIAS_UTEIS[0]));
   const [quizAtivo, setQuizAtivo] = useState<number | null>(null);
@@ -117,9 +113,8 @@ export default function ClinicDemo() {
 
   return (
     <div
-      className={`${styles.clinic} ${newsreader.variable} ${figtree.variable}`}
+      className={`${styles.root} ${newsreader.variable} ${figtree.variable}`}
       data-demo="clinic"
-      style={demoVars}
     >
       <div className={styles["demo-bar"]}>
         <span>Projeto demonstrativo da CIER · marca fictícia. Os botões abrem a conversa com a CIER.</span>
