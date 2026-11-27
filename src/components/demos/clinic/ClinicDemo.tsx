@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { newsreader, figtree } from "./fonts";
 import styles from "./clinic.module.css";
 import {
@@ -16,17 +16,15 @@ import {
 } from "./data";
 
 const fDia = new Intl.DateTimeFormat("pt-BR", { weekday: "short" });
-const fLongo = new Intl.DateTimeFormat("pt-BR", {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-});
+const fLongo = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "numeric", month: "long" });
+
+const demoVars = {
+  "--demo-heading-font": "var(--font-clinic-serif)",
+} as CSSProperties;
 
 export default function ClinicDemo() {
   const [selDia, setSelDia] = useState(0);
-  const [selHora, setSelHora] = useState<string | null>(() =>
-    primeiraLivre(DIAS_UTEIS[0])
-  );
+  const [selHora, setSelHora] = useState<string | null>(() => primeiraLivre(DIAS_UTEIS[0]));
   const [quizAtivo, setQuizAtivo] = useState<number | null>(null);
 
   const slotsDoDia = useMemo(() => horasDe(DIAS_UTEIS[selDia]), [selDia]);
@@ -49,16 +47,12 @@ export default function ClinicDemo() {
     : null;
 
   const bookHref = selHora
-    ? waLink(
-        `Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. Esta é a tela de agendamento de exemplo, com o horário "${resumoTxt}". Quero um site assim para o meu consultório.`
-      )
+    ? waLink(`Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. Esta é a tela de agendamento de exemplo, com o horário "${resumoTxt}". Quero um site assim para o meu consultório.`)
     : "#";
 
   const quiz = quizAtivo !== null ? QUIZ[quizAtivo] : null;
   const quizHref = quiz
-    ? waLink(
-        `Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. A triagem de exemplo sugeriu "${quiz.t}". Quero um site assim para o meu consultório.`
-      )
+    ? waLink(`Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. A triagem de exemplo sugeriu "${quiz.t}". Quero um site assim para o meu consultório.`)
     : "#";
 
   const waGeral = waLink(DEMO_MSG);
@@ -67,12 +61,10 @@ export default function ClinicDemo() {
     <div
       className={`${styles.clinic} ${newsreader.variable} ${figtree.variable}`}
       data-demo="clinic"
+      style={demoVars}
     >
       <div className={styles["demo-bar"]}>
-        <span>
-          Projeto demonstrativo da CIER · marca fictícia. Os botões abrem a
-          conversa com a CIER.
-        </span>
+        <span>Projeto demonstrativo da CIER · marca fictícia. Os botões abrem a conversa com a CIER.</span>
         <a href="/portfolio?frente=sites">← Voltar ao portfólio</a>
       </div>
 
@@ -80,9 +72,7 @@ export default function ClinicDemo() {
         <aside className={styles.rail}>
           <a className={styles.logo} href="#topo">
             <i>S</i>
-            <span>
-              Sorriso <b>Prime</b>
-            </span>
+            <span>Sorriso <b>Prime</b></span>
           </a>
           <nav aria-label="Seções">
             <a href="#agendar">Agendar</a>
@@ -93,38 +83,23 @@ export default function ClinicDemo() {
             <a href="#duvidas">Dúvidas</a>
           </nav>
           <div className={styles.info}>
-            <b>Segunda a sexta</b>
-            <br />
-            8h às 18h
-            <br />
-            <b>Sábado</b>
-            <br />
-            8h às 12h
-            <br />
-            Rua Exemplo, 123 · Centro
-            <br />
-            (endereço fictício)
+            <b>Segunda a sexta</b><br />8h às 18h<br />
+            <b>Sábado</b><br />8h às 12h<br />
+            Rua Exemplo, 123 · Centro<br />(endereço fictício)
           </div>
         </aside>
 
         <main className={styles.main} id="topo">
           <section className={`${styles.hero} ${styles.col}`}>
             <p className={styles.eyebrow}>Odontologia geral e estética</p>
-            <h1>
-              Seu sorriso, <em>sem pressa</em> e sem susto.
-            </h1>
+            <h1>Seu sorriso, <em>sem pressa</em> e sem susto.</h1>
             <p className={styles.lead}>
-              Hora marcada, cada etapa explicada antes de começar e um plano
-              de tratamento que cabe na sua rotina. Escolha abaixo o melhor
-              horário para a primeira avaliação.
+              Hora marcada, cada etapa explicada antes de começar e um plano de tratamento
+              que cabe na sua rotina. Escolha abaixo o melhor horário para a primeira avaliação.
             </p>
           </section>
 
-          <section
-            id="agendar"
-            className={styles.book}
-            aria-labelledby="book-t"
-          >
+          <section id="agendar" className={styles.book} aria-labelledby="book-t">
             <div className={styles["book-main"]}>
               <h2 id="book-t">Escolha um horário</h2>
               <p className={styles.muted}>Avaliação inicial de 40 minutos.</p>
@@ -172,8 +147,7 @@ export default function ClinicDemo() {
                 Pedir este horário no WhatsApp
               </a>
               <p className={styles.note}>
-                Demonstração: os horários são de exemplo e o pedido abre a
-                conversa com a CIER.
+                Demonstração: os horários são de exemplo e o pedido abre a conversa com a CIER.
               </p>
             </div>
           </section>
@@ -182,8 +156,7 @@ export default function ClinicDemo() {
             <div className={styles.col}>
               <h2>Tratamentos</h2>
               <p className={styles.sub}>
-                Do cuidado de rotina aos procedimentos estéticos. Tudo
-                explicado antes de começar.
+                Do cuidado de rotina aos procedimentos estéticos. Tudo explicado antes de começar.
               </p>
             </div>
             <ul className={`${styles.lista} ${styles.col}`}>
@@ -201,14 +174,9 @@ export default function ClinicDemo() {
             <div className={styles.col}>
               <h2>Qual tratamento combina com você?</h2>
               <p className={styles.sub}>
-                Uma pergunta, uma sugestão. Não substitui a avaliação com a
-                dentista.
+                Uma pergunta, uma sugestão. Não substitui a avaliação com a dentista.
               </p>
-              <div
-                className={styles.opts}
-                role="group"
-                aria-label="O que trouxe você aqui"
-              >
+              <div className={styles.opts} role="group" aria-label="O que trouxe você aqui">
                 {QUIZ.map((q, i) => (
                   <button
                     key={q.k}
@@ -240,33 +208,20 @@ export default function ClinicDemo() {
 
           <section id="dra" className={styles.sec}>
             <div className={`${styles.dra} ${styles.col}`}>
-              <div className={styles.portrait} aria-hidden="true">
-                HD
-              </div>
+              <div className={styles.portrait} aria-hidden="true">HD</div>
               <div>
                 <h2>Uma clínica pequena, com atenção de verdade.</h2>
                 <p>
-                  Aqui você conversa com a dentista antes de qualquer
-                  procedimento. Entendemos o que você precisa, explicamos as
-                  opções e decidimos juntos.
+                  Aqui você conversa com a dentista antes de qualquer procedimento.
+                  Entendemos o que você precisa, explicamos as opções e decidimos juntos.
                 </p>
                 <dl className={styles.facts}>
-                  <div>
-                    <dt>Responsável</dt>
-                    <dd>Dra. Helena Duarte</dd>
-                  </div>
-                  <div>
-                    <dt>Registro</dt>
-                    <dd>CRO 00000</dd>
-                  </div>
-                  <div>
-                    <dt>Atuação</dt>
-                    <dd>12 anos</dd>
-                  </div>
+                  <div><dt>Responsável</dt><dd>Dra. Helena Duarte</dd></div>
+                  <div><dt>Registro</dt><dd>CRO 00000</dd></div>
+                  <div><dt>Atuação</dt><dd>12 anos</dd></div>
                 </dl>
                 <p className={styles.ex}>
-                  Nome, registro e tempo de atuação são fictícios, apenas
-                  para demonstração.
+                  Nome, registro e tempo de atuação são fictícios, apenas para demonstração.
                 </p>
               </div>
             </div>
@@ -275,9 +230,7 @@ export default function ClinicDemo() {
           <section id="consulta" className={styles.sec}>
             <div className={styles.col}>
               <h2>Como é a primeira consulta</h2>
-              <p className={styles.sub}>
-                Quarenta minutos, sem surpresa no meio do caminho.
-              </p>
+              <p className={styles.sub}>Quarenta minutos, sem surpresa no meio do caminho.</p>
               <ol className={styles.tl}>
                 {TIMELINE.map((item) => (
                   <li key={item.t}>
@@ -309,25 +262,16 @@ export default function ClinicDemo() {
               <h2>Onde estamos</h2>
               <div className={styles.hours}>
                 <dl>
-                  <dt>Endereço</dt>
-                  <dd>Rua Exemplo, 123 · Centro (fictício)</dd>
-                  <dt>Contato</dt>
-                  <dd>(00) 00000-0000 · contato@exemplo.com</dd>
+                  <dt>Endereço</dt><dd>Rua Exemplo, 123 · Centro (fictício)</dd>
+                  <dt>Contato</dt><dd>(00) 00000-0000 · contato@exemplo.com</dd>
                 </dl>
                 <dl>
-                  <dt>Segunda a sexta</dt>
-                  <dd>8h às 18h</dd>
-                  <dt>Sábado</dt>
-                  <dd>8h às 12h</dd>
+                  <dt>Segunda a sexta</dt><dd>8h às 18h</dd>
+                  <dt>Sábado</dt><dd>8h às 12h</dd>
                 </dl>
               </div>
               <div className={styles["cta-end"]}>
-                <a
-                  className={styles.btn}
-                  target="_blank"
-                  rel="noreferrer"
-                  href={waGeral}
-                >
+                <a className={styles.btn} target="_blank" rel="noreferrer" href={waGeral}>
                   Falar no WhatsApp
                 </a>
                 <a className={`${styles.btn} ${styles.line}`} href="#agendar">
@@ -338,8 +282,7 @@ export default function ClinicDemo() {
           </section>
 
           <footer className={styles.foot}>
-            Sorriso Prime é uma marca fictícia criada pela CIER para
-            demonstração. ·{" "}
+            Sorriso Prime é uma marca fictícia criada pela CIER para demonstração. {" "}
             <a href="/portfolio?frente=sites" style={{ textDecoration: "underline" }}>
               Portfólio CIER
             </a>
@@ -351,4 +294,4 @@ export default function ClinicDemo() {
       </a>
     </div>
   );
-}
+  }
