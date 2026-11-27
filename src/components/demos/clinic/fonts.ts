@@ -1,4 +1,13 @@
-import { Fraunces, Inter } from "next/font/google";
+import { Newsreader, Figtree } from "next/font/google";
 
-export const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap" });
-export const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+export const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-clinic-serif",
+  display: "swap",
+});
+
+export const figtree = Figtree({
+  subsets: ["latin"],
+  variable: "--font-clinic-sans",
+  display: "swap",
+});
