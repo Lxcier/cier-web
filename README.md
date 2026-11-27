@@ -28,15 +28,17 @@ src/
 │  │     └─ [slug]/page.tsx        /portfolio/<slug>
 │  └─ demos/              projetos demonstrativos, fora do layout do site
 │     ├─ sorriso-prime/page.tsx    /demos/sorriso-prime
-│     └─ vila-nova-imoveis/page.tsx /demos/vila-nova-imoveis
+│     ├─ vila-nova-imoveis/page.tsx /demos/vila-nova-imoveis
+│     └─ loja-virtual/page.tsx     /demos/loja-virtual
 ├─ components/            COMPONENTES (um arquivo por componente, nome único)
 │  ├─ layout/             Header, Footer, WhatsAppFloat
 │  ├─ home/               Hero, Services, PortfolioTeaser, Pricing, Process, Contact, ContactForm
 │  ├─ portfolio/          PortfolioView, PortfolioExplorer, ProjectCard, ProjectDetail
 │  ├─ ui/                 Icons, Breadcrumbs
 │  └─ demos/              um diretório por demo, com CSS Module e fontes próprias
-│     ├─ clinic/          ClinicDemo.tsx, clinic.module.css, fonts.ts
+│     ├─ clinic/          ClinicDemo.tsx, ClinicBooking.tsx, ClinicTriage.tsx, clinic.module.css, fonts.ts
 │     ├─ real-estate/     RealEstateDemo.tsx, real-estate.module.css, listings.ts, fonts.ts
+│     ├─ store/           StoreDemo.tsx, icons.tsx, products.ts, store.module.css, fonts.ts
 │     └─ demo-base.css    base compartilhada dos demos (escopada por [data-demo])
 ├─ data/                  DADOS: projects.ts (catálogo do portfólio), site.ts (contato)
 ├─ lib/                   FUNÇÕES: whatsapp.ts, projects.ts

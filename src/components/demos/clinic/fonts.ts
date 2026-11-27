@@ -1,13 +1,15 @@
-import { Newsreader, Figtree } from "next/font/google";
+import { Figtree, Newsreader } from "next/font/google";
 
 export const newsreader = Newsreader({
   subsets: ["latin"],
-  variable: "--font-clinic-serif",
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-newsreader",
   display: "swap",
 });
-
 export const figtree = Figtree({
   subsets: ["latin"],
-  variable: "--font-clinic-sans",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-figtree",
   display: "swap",
 });

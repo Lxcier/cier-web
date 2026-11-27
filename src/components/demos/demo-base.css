@@ -11,6 +11,8 @@
 :where([data-demo]) :where(h1, h2, h3) {
   font-family: var(--demo-heading-font, Georgia, serif);
   font-weight: 600;
+  margin: 0;
+  line-height: 1.2;
 }
 
 :where([data-demo]) p {
@@ -20,4 +22,14 @@
 :where([data-demo]) a {
   color: inherit;
   text-decoration: none;
+}
+
+:where([data-demo]) :where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+}
+
+/* Equivale ao [hidden]{display:none!important} dos HTMLs originais. */
+:where([data-demo]) [hidden] {
+  display: none !important;
 }
