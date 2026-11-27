@@ -1,6 +1,7 @@
 /* Layout: menu lateral fixo no desktop, coluna única de leitura calma, agendamento por horário logo na abertura. */
-.clinic {
+.root {
   color-scheme: light;
+  --demo-heading-font: var(--font-clinic-serif), Georgia, serif;
   --bg: #f3f7f5;
   --paper: #ffffff;
   --ink: #10302e;
@@ -20,19 +21,6 @@
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
 }
-.clinic, .clinic * { box-sizing: border-box; }
-.clinic h1, .clinic h2, .clinic h3 {
-  font-family: var(--font-clinic-serif), Georgia, serif;
-  font-weight: 500;
-  margin: 0;
-  line-height: 1.1;
-  text-wrap: balance;
-}
-.clinic p { margin: 0; }
-.clinic a { color: inherit; text-decoration: none; }
-.clinic button { font: inherit; color: inherit; }
-.clinic .muted { color: var(--muted); }
-.clinic [hidden] { display: none !important; }
 
 .demo-bar {
   background: var(--ink); color: #e2f1ee; font-size: .8125rem; padding: .55rem 1.1rem;
