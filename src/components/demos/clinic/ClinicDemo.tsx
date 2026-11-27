@@ -3,17 +3,75 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { newsreader, figtree } from "./fonts";
 import styles from "./clinic.module.css";
-import {
-  DIAS_UTEIS,
-  horasDe,
-  primeiraLivre,
-  TRATAMENTOS,
-  QUIZ,
-  TIMELINE,
-  FAQ,
-  waLink,
-  DEMO_MSG,
-} from "./data";
+
+const WHATSAPP_NUMBER = "5511925560109";
+const DEMO_MSG =
+  'Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER e quero um site assim para o meu consultório.';
+
+function wa(msg: string) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+type Slot = { h: string; ocupado: boolean };
+
+const HORAS = ["09:00", "10:30", "14:00", "15:30", "17:00"];
+
+function gerarDiasUteis(): Date[] {
+  const dias: Date[] = [];
+  const d = new Date();
+  d.setHours(12, 0, 0, 0);
+  while (dias.length < 7) {
+    d.setDate(d.getDate() + 1);
+    if (d.getDay() !== 0) dias.push(new Date(d));
+  }
+  return dias;
+}
+
+function horasDe(dia: Date): Slot[] {
+  const lista = dia.getDay() === 6 ? HORAS.slice(0, 2) : HORAS;
+  return lista.map((h, k) => ({
+    h,
+    ocupado: (dia.getDate() * 7 + k * 3) % 4 === 0,
+  }));
+}
+
+function primeiraLivre(dia: Date): string | null {
+  const livre = horasDe(dia).find((x) => !x.ocupado);
+  return livre ? livre.h : null;
+}
+
+const TRATAMENTOS = [
+  { titulo: "Limpeza e prevenção", desc: "Profilaxia, aplicação de flúor e orientação de higiene para evitar problemas.", dur: "40 min" },
+  { titulo: "Clareamento", desc: "Em consultório ou caseiro, escolhido conforme a sensibilidade dos seus dentes.", dur: "60 min por sessão" },
+  { titulo: "Ortodontia", desc: "Aparelho fixo ou alinhadores, com revisão regular.", dur: "30 min por revisão" },
+  { titulo: "Restaurações", desc: "Cáries tratadas e dente recuperado em cor e formato.", dur: "45 min" },
+  { titulo: "Implantes e próteses", desc: "Reposição de dentes com planejamento por etapas.", dur: "Plano individual" },
+  { titulo: "Odontopediatria", desc: "Atendimento no ritmo da criança, a partir dos 2 anos.", dur: "30 min" },
+];
+
+const QUIZ = [
+  { k: "Estou com dor ou algo me incomoda", t: "Avaliação de urgência", p: "O primeiro passo é um exame clínico para achar a causa. Pode ser uma cárie, uma inflamação ou uma restauração a refazer. Peça o horário mais próximo." },
+  { k: "Quero um sorriso mais claro", t: "Clareamento", p: "Conversamos sobre sensibilidade e escolhemos entre o clareamento em consultório e o caseiro, com acompanhamento." },
+  { k: "Quero alinhar os dentes", t: "Ortodontia", p: "Na avaliação vemos se o caso pede aparelho fixo ou alinhadores e montamos um plano com prazo estimado." },
+  { k: "Só quero fazer a revisão", t: "Limpeza e prevenção", p: "Uma limpeza com flúor e orientação de higiene a cada seis meses evita a maior parte dos problemas." },
+  { k: "É para o meu filho", t: "Odontopediatria", p: "A primeira visita é de conhecimento: a criança conhece o consultório e a dentista, no ritmo dela." },
+  { k: "Perdi um dente", t: "Implantes e próteses", p: "Avaliamos a região e planejamos a reposição por etapas, explicando cada uma antes de começar." },
+];
+
+const TIMELINE = [
+  { t: "0 a 10 min", titulo: "Conversa", desc: "Você conta o que sente e o que quer melhorar. Ninguém começa nada antes disso." },
+  { t: "10 a 30 min", titulo: "Exame", desc: "Avaliação clínica e, se for preciso, radiografia." },
+  { t: "30 a 40 min", titulo: "Plano de tratamento", desc: "Você sai com as opções, os prazos e os valores antes de decidir." },
+];
+
+const FAQ = [
+  { q: "Atendem crianças?", a: "Sim, a partir dos 2 anos. O atendimento é feito com calma e no ritmo da criança." },
+  { q: "Quais formas de pagamento?", a: "Aceitamos Pix, cartão de crédito e débito. Tratamentos mais longos podem ser parcelados, e o valor aparece no plano de tratamento antes de você decidir." },
+  { q: "Preciso levar algum exame?", a: "Se você já tem radiografias, leve. Se não, avaliamos se há necessidade." },
+  { q: "E se eu precisar remarcar?", a: "É só avisar pelo WhatsApp com um dia de antecedência e escolhemos outro horário." },
+];
+
+const DIAS_UTEIS = gerarDiasUteis();
 
 const fDia = new Intl.DateTimeFormat("pt-BR", { weekday: "short" });
 const fLongo = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "numeric", month: "long" });
@@ -47,15 +105,15 @@ export default function ClinicDemo() {
     : null;
 
   const bookHref = selHora
-    ? waLink(`Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. Esta é a tela de agendamento de exemplo, com o horário "${resumoTxt}". Quero um site assim para o meu consultório.`)
+    ? wa(`Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. Esta é a tela de agendamento de exemplo, com o horário "${resumoTxt}". Quero um site assim para o meu consultório.`)
     : "#";
 
   const quiz = quizAtivo !== null ? QUIZ[quizAtivo] : null;
   const quizHref = quiz
-    ? waLink(`Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. A triagem de exemplo sugeriu "${quiz.t}". Quero um site assim para o meu consultório.`)
+    ? wa(`Olá, vi o projeto demo "Sorriso Prime" no portfólio da CIER. A triagem de exemplo sugeriu "${quiz.t}". Quero um site assim para o meu consultório.`)
     : "#";
 
-  const waGeral = waLink(DEMO_MSG);
+  const waGeral = wa(DEMO_MSG);
 
   return (
     <div
@@ -294,4 +352,4 @@ export default function ClinicDemo() {
       </a>
     </div>
   );
-  }
+}
